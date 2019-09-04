@@ -1,0 +1,75 @@
+{% extends "index.html" %}
+{% block konten %}
+   <div class="container">
+     <p>
+       {% with messages = get_flashed_messages() %}
+      	  {% if messages %}
+      	    {% for message in messages %}
+      			  <div class="card-panel teal lighten-2">{{message}}</div>
+      		   {% endfor %}
+      	  {% endif %}
+      	{% endwith %}
+     </p>
+
+     Coba dengan upload citra:
+    <div class="row">
+      <form method="post" action="/test" enctype="multipart/form-data">
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>File</span>
+            <input type="file" name="file">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>File penguji(optional)</span>
+            <input type="file" name="file_compare">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit">Upload</button>
+      </form>
+    </div>
+    <div class="row">
+      atau dengan citra yang sudah pernah dicoba:
+          <table class="table is-bordered is-striped">
+            <thead>
+              <tr>
+                <th>Gambar</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if not info.list_img %}
+                <tr>
+                  <td>
+                    Tidak ada file
+                  </td>
+                </tr>
+              {%endif%}
+              {% for img in info.list_img %}
+                <tr>
+                  <td class="valign-wrapper"><img class="responsive-img" src="{{ url_for('static', filename='')}}image/abstrak/{{img}}" height="200" width="200"> <span style="margin-left:10px">{{img}}</span></td>
+                  <td><a href="test?img={{img}}">Lihat Hasil</a> | <a href="test?img={{img}}&retest=1">Test ulang</a> | <a href="download/{{img}}">Download Hasil</a> | <a href="delete/{{img}}">Hapus</a></td>
+                </tr>
+        		  {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
+
+
+
+   </div>
+<script type="text/javascript">
+
+ $(document).ready(function(){
+   $('select').formSelect();
+ });
+</script>
+{%endblock%}

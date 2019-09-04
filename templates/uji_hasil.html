@@ -1,0 +1,240 @@
+{% extends "index.html" %}
+{% block konten %}
+<style>
+.subtitle{
+  margin-top: 10px !important;
+  margin-bottom: 0px !important;
+}
+
+.table-grid{
+  border: 1px solid black;
+}
+
+.table-grid td{
+  padding: 1px;
+  border: 1px solid black;
+}
+</style>
+<center>
+  <h3>Prediksi : {{info.prediction}}</h3>
+  <span>{{info.votes}} voting dari {{info.jumlah_model}} model</span>
+</center>
+
+
+<div class="container">
+  <h5>Detail:</h5>
+
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header">Citra Asli :</div>
+      <div class="collapsible-body">
+        <div class="row">
+          <div class="col s12 center-align">
+            <p><img src="{{info.clean}}"/></p>
+            ukuran {{((info.image.ori_size|string)[1:-1]).replace(","," x")}} px
+          </div>
+
+          <div class="col s12">
+            <ul class="collapsible">
+              <li>
+                <div class="collapsible-header">Nilai Citra ({{ ",".join(info.channel) }})</div>
+                <div class="collapsible-body">
+                  {% for i in info.image.vector_asli %}
+                      <p>
+                        {{ ((i|string)[1:-1]).replace("[","(").replace("]",")") }}
+                      </p>
+                  {%endfor%}
+                </div>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+    </li>
+    {% if info.image.ori_size != info.image.current_size %}
+      <li>
+        <div class="collapsible-header">Resize menjadi ukuran 15x15px:</div>
+        <div class="collapsible-body">
+          <div class="row">
+
+            <div class="col s12 center-align">
+              <p><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}resize.jpg" /></p>
+            </div>
+
+            <div class="col s12">
+              <ul class="collapsible">
+                <li>
+                  <div class="collapsible-header">Nilai Citra</div>
+                  <div class="collapsible-body">
+                    <div style="width:100%;overflow: scroll">
+                      <table>
+                        <tbody>
+                          {% for i in info.image.vector_resize %}
+                          <tr>
+                            <td>
+                              {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                              </td>
+                            </tr>
+                            {%endfor%}
+                          </tbody>
+                        </table>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </li>
+    {%endif%}
+    <li>
+      <div class="collapsible-header">Citra Grayscale:</div>
+      <div class="collapsible-body">
+        <div class="row">
+
+          <div class="col s12 center-align">
+            {% if info.image.ori_size != info.image.current_size %}
+              <p><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}resize.jpg" /></p>
+            {% else %}
+              <p><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}ori.jpg" /></p>
+            {%endif%}
+          </div>
+
+          <div class="col s12">
+            <ul class="collapsible">
+              <li>
+                <div class="collapsible-header">Nilai Citra</div>
+                <div class="collapsible-body">
+                  <table>
+                    <tbody>
+                      {% for i in info.image.vector_grayscale %}
+                        <tr>
+                          <td>
+                            {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                            </td>
+                        </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Citra Biner:</div>
+      <div class="collapsible-body">
+        <div class="row">
+
+          <div class="col s12 center-align">
+            <p><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}binary.jpg" /></p>
+          </div>
+
+          <div class="col s12">
+            <ul class="collapsible">
+              <li>
+                <div class="collapsible-header">Integral Image</div>
+                <div class="collapsible-body">
+                  <div style="width:100%;overflow: scroll">
+                    <table class="table-grid">
+                      <tbody>
+                        {% for i in info.image.binary.integral_image %}
+                          <tr>
+                            <td>
+                              {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                              </td>
+                          </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="collapsible-header">Nilai Citra</div>
+                <div class="collapsible-body">
+                  <table>
+                    <tbody>
+                      {% for i in info.image.vector %}
+                        <tr>
+                          <td>
+                            {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                            </td>
+                        </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+
+
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Format Vektor:</div>
+      <div class="collapsible-body">
+        {{ (info.image.vector_flat) }}
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Fungsi kernel (contoh model no {{info.ex.no}} kelas negatif {{info.ex.negative_class}} & kelas positif {{info.prediction}}):</div>
+      <div class="collapsible-body">
+        {%if info.ex.kernel_type == "rbf"%}
+            Gamma : {{info.ex.gamma}}<br />
+        {%endif%}
+        {{ (info.ex.kernel) }}
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Klasifikasi:</div>
+      <div class="collapsible-body">
+        <span>b = {{info.ex.bias[0]}}</span>
+        <ul class="collapsible">
+          <li>
+            <div class="collapsible-header">W:</div>
+            <div class="collapsible-body">
+              {{info.ex.w[0]}}
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header">
+              {%if info.ex.kernel_type == "rbf"%}
+                W.X+b:
+              {%else%}
+                K(W.X)+b:
+              {%endif%}
+            </div>
+            <div class="collapsible-body">
+              {{info.ex.df}}
+
+              {% if(info.ex.df > 0) %}
+                <span class="new badge" data-badge-caption="">Kelas Positif</span>
+              {% else %}
+                <span class="new badge red" data-badge-caption="">Kelas Negatif</span>
+              {%endif%}
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </li>
+  </ul>
+</div>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
+{%endblock%}

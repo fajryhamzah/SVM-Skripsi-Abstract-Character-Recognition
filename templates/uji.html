@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+{% block konten %}
+   <div class="container">
+     <p>
+
+           {% with messages = get_flashed_messages() %}
+        	  {% if messages %}
+            <ul class="collection">
+              <li class="collection-item">
+        	    {% for message in messages %}
+        			   {{message|safe}}
+        		  {% endfor %}
+            </li>
+        	  {% endif %}
+        	{% endwith %}
+      </ul>
+
+     </p>
+
+     Upload citra karakter:
+     <div class="row">
+       <form method="post"  enctype="multipart/form-data">
+         <div class="file-field input-field">
+           <div class="btn">
+             <span>File</span>
+             <input type="file" name="file" />
+           </div>
+           <div class="file-path-wrapper">
+             <input class="file-path validate" type="text">
+           </div><br />
+           <button class="btn waves-effect waves-light" type="submit">Upload</button>
+         </div>
+       </form>
+    </div>
+     <h5>Atau uji akurasi:</h5>
+     <div class="row">
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="type" value="bulk"/>
+        <div class="col s6">
+          <span>Pilih file csv :</span>
+          <div class="file-field input-field">
+            <div class="btn">
+            <span>File</span>
+            <input type="file" name="file_bulk">
+          </div>
+            <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div><br />
+          <div class="row">
+            <div class="col s12">
+              <button class="btn waves-effect waves-light" type="submit">Upload</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </form>
+    </div>
+
+      <div class="row">
+        atau data uji yang pernah diupload:
+            <table class="table is-bordered is-striped">
+              <thead>
+                <tr>
+                  <th>Dataset</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if not info.list %}
+                  <tr>
+                    <td>
+                      Tidak ada file
+                    </td>
+                  </tr>
+                {%endif%}
+                {% for img in info.list %}
+                  <tr>
+                    <td class="valign-wrapper">{{img}}</td>
+                    <td><a href="uji?test={{img}}">Uji Ulang</a></td>
+                  </tr>
+          		  {% endfor %}
+              </tbody>
+            </table>
+      </div>
+
+
+   </div>
+{%endblock%}

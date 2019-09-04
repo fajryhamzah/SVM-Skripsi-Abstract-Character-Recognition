@@ -1,0 +1,21 @@
+<nav>
+  <div class="nav-wrapper">
+    <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li><a href="/">Home</a></li>
+      <li><a href="training">Training</a></li>
+      <li><a href="uji">Uji Klasifier</a></li>
+    </ul>
+    <ul id="dropdown1" class="dropdown-content">
+      {% for a in config.MODEL_LIST %}
+        {% if a == config.MODEL_ACTIVE %}
+          <li class="active"><a href="#!">{{a}}</a></li>
+        {%else%}
+          <li><a href="change_model/{{a}}">{{a}}</a></li>
+        {%endif%}
+      {%endfor%}
+    </ul>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">{{config.MODEL_ACTIVE}} ></a></li>
+    </ul>
+  </div>
+</nav>

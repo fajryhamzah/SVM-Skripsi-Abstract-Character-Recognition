@@ -1,0 +1,305 @@
+{% extends "index.html" %}
+{% block konten %}
+   <div class="container">
+     <p>
+       {% with messages = get_flashed_messages() %}
+      	  {% if messages %}
+      	    {% for message in messages %}
+      			<div class="card-panel teal lighten-2">{{message|safe}}</div>
+      		{% endfor %}
+      	  {% endif %}
+      	{% endwith %}
+     </p>
+
+     <div class="row">
+       Model Kernel : {{info.kernel}}<br />
+       {% if info.karakter is not none %}
+       Karakter yang telah dilatih : {{",".join(info.karakter)}}<br />
+       {%endif%}
+       Upload citra karakter:
+      <form method="post" action="train"  enctype="multipart/form-data">
+        <input type="hidden" name="type" value="single"/>
+        <div class="col s6">
+          <span>Latih Karakter 1</span>
+          <div class="file-field input-field">
+            <div class="btn">
+            <span>File</span>
+            <input type="file" name="file">
+          </div>
+            <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div><br />
+              <div class="input-field col s10">
+                <select name="label" required>
+               <option value="" disabled selected>Pilih kelas citra:</option>
+               <optgroup label="Lower Case">
+                 <option value='a'>a</option>
+                 <option value='b'>b</option>
+                 <option value='c'>c</option>
+                 <option value='d'>d</option>
+                 <option value='e'>e</option>
+                 <option value='f'>f</option>
+                 <option value='g'>g</option>
+                 <option value='h'>h</option>
+                 <option value='i'>i</option>
+                 <option value='j'>j</option>
+                 <option value='k'>k</option>
+                 <option value='l'>l</option>
+                 <option value='m'>m</option>
+                 <option value='n'>n</option>
+                 <option value='o'>o</option>
+                 <option value='p'>p</option>
+                 <option value='q'>q</option>
+                 <option value='r'>r</option>
+                 <option value='s'>s</option>
+                 <option value='t'>t</option>
+                 <option value='u'>u</option>
+                 <option value='v'>v</option>
+                 <option value='w'>w</option>
+                 <option value='x'>x</option>
+                 <option value='y'>y</option>
+                 <option value='z'>z</option>
+               </optgroup>
+               <optgroup label="Upper Case">
+                 <option value='A'>A</option>
+                 <option value='B'>B</option>
+                 <option value='C'>C</option>
+                 <option value='D'>D</option>
+                 <option value='E'>E</option>
+                 <option value='F'>F</option>
+                 <option value='G'>G</option>
+                 <option value='H'>H</option>
+                 <option value='I'>I</option>
+                 <option value='J'>J</option>
+                 <option value='K'>K</option>
+                 <option value='L'>L</option>
+                 <option value='M'>M</option>
+                 <option value='N'>N</option>
+                 <option value='O'>O</option>
+                 <option value='P'>P</option>
+                 <option value='Q'>Q</option>
+                 <option value='R'>R</option>
+                 <option value='S'>S</option>
+                 <option value='T'>T</option>
+                 <option value='U'>U</option>
+                 <option value='V'>V</option>
+                 <option value='W'>W</option>
+                 <option value='X'>X</option>
+                 <option value='Y'>Y</option>
+                 <option value='Z'>Z</option>
+               </optgroup>
+               <optgroup label="Digits">
+                 <option value='0'>0</option>
+                 <option value='1'>1</option>
+                 <option value='2'>2</option>
+                 <option value='3'>3</option>
+                 <option value='4'>4</option>
+                 <option value='5'>5</option>
+                 <option value='6'>6</option>
+                 <option value='7'>7</option>
+                 <option value='8'>8</option>
+                 <option value='9'>9</option>
+               </optgroup>
+               <optgroup label="Special Character">
+                 <option value='.'>.(dot)</option>
+                 <option value=','>,(koma)</option>
+                 <option value='"'>"(kutip dua)</option>
+                 <option value="'">'(kutip satu)</option>
+                 <option value="(">(</option>
+                 <option value=")">)</option>
+                 <option value="[">[</option>
+                 <option value="]">]</option>
+                 <option value="*">*</option>
+                 <option value="%">%</option>
+                 <option value="#">#</option>
+                 <option value=":">:</option>
+               </optgroup>
+             </select>
+                <label>Kelas/Label</label>
+              </div>
+            </div>
+          </div>
+        {% if info.karakter is none %}
+        <div class="col s6">
+          <span>Latih Karakter 2</span>
+          <div class="file-field input-field">
+            <div class="btn">
+            <span>File</span>
+            <input type="file" name="file1">
+          </div>
+            <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div><br />
+              <div class="input-field col s10">
+                <select name="label1" required>
+                  <option value="" disabled selected>Pilih kelas citra:</option>
+                  <optgroup label="Lower Case">
+                   <option value='a'>a</option>
+                   <option value='b'>b</option>
+                   <option value='c'>c</option>
+                   <option value='d'>d</option>
+                   <option value='e'>e</option>
+                   <option value='f'>f</option>
+                   <option value='g'>g</option>
+                   <option value='h'>h</option>
+                   <option value='i'>i</option>
+                   <option value='j'>j</option>
+                   <option value='k'>k</option>
+                   <option value='l'>l</option>
+                   <option value='m'>m</option>
+                   <option value='n'>n</option>
+                   <option value='o'>o</option>
+                   <option value='p'>p</option>
+                   <option value='q'>q</option>
+                   <option value='r'>r</option>
+                   <option value='s'>s</option>
+                   <option value='t'>t</option>
+                   <option value='u'>u</option>
+                   <option value='v'>v</option>
+                   <option value='w'>w</option>
+                   <option value='x'>x</option>
+                   <option value='y'>y</option>
+                   <option value='z'>z</option>
+                 </optgroup>
+                 <optgroup label="Upper Case">
+                   <option value='A'>A</option>
+                   <option value='B'>B</option>
+                   <option value='C'>C</option>
+                   <option value='D'>D</option>
+                   <option value='E'>E</option>
+                   <option value='F'>F</option>
+                   <option value='G'>G</option>
+                   <option value='H'>H</option>
+                   <option value='I'>I</option>
+                   <option value='J'>J</option>
+                   <option value='K'>K</option>
+                   <option value='L'>L</option>
+                   <option value='M'>M</option>
+                   <option value='N'>N</option>
+                   <option value='O'>O</option>
+                   <option value='P'>P</option>
+                   <option value='Q'>Q</option>
+                   <option value='R'>R</option>
+                   <option value='S'>S</option>
+                   <option value='T'>T</option>
+                   <option value='U'>U</option>
+                   <option value='V'>V</option>
+                   <option value='W'>W</option>
+                   <option value='X'>X</option>
+                   <option value='Y'>Y</option>
+                   <option value='Z'>Z</option>
+                 </optgroup>
+                 <optgroup label="Digits">
+                   <option value='0'>0</option>
+                   <option value='1'>1</option>
+                   <option value='2'>2</option>
+                   <option value='3'>3</option>
+                   <option value='4'>4</option>
+                   <option value='5'>5</option>
+                   <option value='6'>6</option>
+                   <option value='7'>7</option>
+                   <option value='8'>8</option>
+                   <option value='9'>9</option>
+                 </optgroup>
+                 <optgroup label="Special Character">
+                   <option value='.'>.(dot)</option>
+                   <option value=','>,(koma)</option>
+                   <option value='"'>"(kutip dua)</option>
+                   <option value="'">'(kutip satu)</option>
+                   <option value="(">(</option>
+                   <option value=")">)</option>
+                   <option value="[">[</option>
+                   <option value="]">]</option>
+                   <option value="*">*</option>
+                   <option value="%">%</option>
+                   <option value="#">#</option>
+                   <option value=":">:</option>
+                 </optgroup>
+             </select>
+             <label>Kelas/Label</label>
+              </div>
+            </div>
+        </div>
+        {%endif%}
+        <div class="row">
+          <div class="col s12">
+            <button class="btn waves-effect waves-light" type="submit">Upload</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <h5>Atau latih dengan model baru:</h5>
+    <div class="row">
+     <form method="post" action="train" enctype="multipart/form-data">
+       <input type="hidden" name="type" value="bulk"/>
+       <div class="col s6">
+         <span>Pilih file csv baru:</span>
+         <div class="file-field input-field">
+           <div class="btn">
+           <span>File</span>
+           <input type="file" name="file_csv">
+         </div>
+           <div class="file-path-wrapper">
+           <input class="file-path validate" type="text">
+         </div><br />
+          </div>
+          <p>
+            Kernel :
+            <label>
+              <input name="kernel" class="kernel" type="radio" value="rbf" checked />
+              <span>rbf</span>
+            </label>
+            <label>
+              <input name="kernel" class="kernel" type="radio" value="linear" />
+              <span>linear</span>
+            </label>
+          </p>
+          <div class="row">
+            <div class="col s12">
+              C :
+              <div class="input-field inline">
+                <input name="c" type="number" value="1" min="1">
+              </div>
+            </div>
+          </div>
+          <div class="row" id="rbf_param">
+            <div class="col s12">
+              Gamma:
+              <div class="input-field inline">
+                <input name="gamma" type="number" value="1" min="0">
+              </div>
+            </div>
+          </div>
+         </div>
+       <div class="row">
+         <div class="col s12">
+           <button class="btn waves-effect waves-light" type="submit">Upload</button>
+         </div>
+       </div>
+     </form>
+   </div>
+
+
+     <script type="text/javascript">
+       $(document).ready(function(){
+         $('select').formSelect();
+
+         $(".kernel").on("change",function(){
+           var a = $('input[name=kernel]:checked').val();
+
+           if(a == "rbf"){
+             $("#rbf_param").show();
+           }
+           else{
+             $("#rbf_param").hide();
+           }
+         });
+       });
+    </script>
+
+
+
+
+   </div>
+{%endblock%}

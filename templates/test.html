@@ -1,0 +1,306 @@
+{% extends "index.html" %}
+{% block konten %}
+<style>
+.subtitle{
+  margin-top: 10px !important;
+  margin-bottom: 0px !important;
+}
+
+.card img{
+  max-height: 100px;
+}
+
+img{
+  width: 100%;
+}
+
+
+
+.card-content{
+  padding: 10px !important;
+}
+
+.card-action{
+  padding: 5px !important;
+}
+
+</style>
+
+ <div class="row">
+    <div class="col s12">
+      {%if info["skip"] %}
+      <div class="row">
+        <form>
+          <input type="hidden" name="img" value="{{info["img_name"]}}" />
+          <div class="input-field inline col s2">
+            <select name="banding">
+              <option value="" disabled selected>Bandingkan hasil dengan</option>
+              {% for i in info["skip"] %}
+                <option value="{{i}}">{{i}}</option>
+              {%endfor%}
+            </select>
+            <label>File banding</label>
+          </div>
+          <div class="input-field inline col s2">
+            <button class="btn waves-effect waves-light" type="submit">Bandingkan</button>
+          </div>
+        </form>
+      </div>
+      {%endif%}
+
+      {%if info["accuracy"] %}
+
+          <ul class="collection">
+            <li class="collection-item">Accuracy (Sensitive): {{info["accuracy"]["sensitive"]}}</li>
+            <li class="collection-item">Accuracy (Insensitive): {{info["accuracy"]["insensitive"]}}</li>
+          </ul>
+
+      {%endif%}
+      <h5>Pengkategorian:</h5>
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header">Judul Abstrak</div>
+          <div class="collapsible-body">
+            <div class="row">
+              <div class="col s12">
+                <ul class="tabs">
+                  <li class="tab col s3"><a href="#jdl1">Text</a></li>
+                  <li class="tab col s3"><a class="active" href="#jdl2">Gambar</a></li>
+                </ul>
+              </div>
+              <div id="jdl1" class="col s12">
+                {% if info.categorize.judul_start == info.categorize.judul_end  %}
+                    {{info.classifier[info.categorize.judul_start]|join(' ') }}
+                {%else%}
+                    {%for i in range(info.categorize.judul_start,info.categorize.judul_end)%}
+                      {{ info.classifier[i]|join(' ') }}<br />
+                    {%endfor%}
+                {%endif%}
+              </div>
+              <div id="jdl2" class="col s12">
+                {% if info.categorize.judul_start == info.categorize.judul_end  %}
+                    <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{info.categorize.judul_start}}.jpg" />
+                {%else%}
+                    {%for i in range(info.categorize.judul_start,info.categorize.judul_end)%}
+                      <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{i}}.jpg" />
+                    {%endfor%}
+                {%endif%}
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Nama Penulis : {{info.classifier[info.categorize.nama]|join(" ") }} </div>
+          <div class="collapsible-body"><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{info.categorize.nama}}.jpg" /></div>
+        </li>
+        <li>
+          <div class="collapsible-header">NIM Penulis : {{info.classifier[info.categorize.nim]|join(" ") }}</div>
+          <div class="collapsible-body"><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{info.categorize.nim}}.jpg" /></div>
+        </li>
+        <li>
+          <div class="collapsible-header">Isi</div>
+          <div class="collapsible-body">
+            <div class="row">
+              <div class="col s12">
+                <ul class="tabs">
+                  <li class="tab col s3"><a href="#isi1">Text</a></li>
+                  <li class="tab col s3"><a class="active" href="#isi2">Gambar</a></li>
+                </ul>
+              </div>
+              <div id="isi1" class="col s12">
+                {% if info.categorize.isi_start == info.categorize.isi_end  %}
+                    {{info.classifier[info.categorize.isi_start]|join(" ") }}
+                {%else%}
+                    {%for i in range(info.categorize.isi_start,info.categorize.isi_end+1)%}
+                      {{ info.classifier[i]|join(" ") }}<br />
+                    {%endfor%}
+                {%endif%}
+              </div>
+              <div id="isi2" class="col s12">
+                {% if info.categorize.isi_start == info.categorize.isi_end  %}
+                    <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{info.categorize.isi_start}}.jpg" />
+                {%else%}
+                    {%for i in range(info.categorize.isi_start,info.categorize.isi_end+1)%}
+                      <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{i}}.jpg" />
+                    {%endfor%}
+                {%endif%}
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Kata Kunci</div>
+          <div class="collapsible-body">
+            <div class="row">
+              <div class="col s12">
+                <ul class="tabs">
+                  <li class="tab col s3"><a href="#a1">Text</a></li>
+                  <li class="tab col s3"><a class="active" href="#a2">Gambar</a></li>
+                </ul>
+              </div>
+              <div id="a1" class="col s12">
+                {% if info.categorize.keyword_start == info.categorize.keyword_end  %}
+                    {{info.classifier[info.categorize.keyword_start]|join(" ") }}
+                {%else%}
+                    {%for i in range(info.categorize.keyword_start,info.categorize.keyword_end+1)%}
+                      {{ info.classifier[i]|join(" ") }}<br />
+                    {%endfor%}
+                {%endif%}
+              </div>
+              <div id="a2" class="col s12">
+                {% if info.categorize.keyword_start == info.categorize.keyword_end  %}
+                    <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{info.categorize.keyword_start}}.jpg" />
+                {%else%}
+                    {%for i in range(info.categorize.keyword_start,info.categorize.keyword_end+1)%}
+                      <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{i}}.jpg" />
+                    {%endfor%}
+                {%endif%}
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+
+      <ul class="tabs">
+        <li class="tab col s3"><a class="active" href="#test1">Full Text</a></li>
+        <li class="tab col s3"><a  href="#test2">Detail</a></li>
+      </ul>
+    </div>
+    <div id="test1" class="col s12">
+
+    <h5>Full Text:</h5>
+    <ul class="collection">
+        <li class="collection-item"><pre>{{ info.full_text }}</pre></li>
+      </ul>
+    </div>
+
+    <div id="test2" class="col s12">
+
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header">Citra Asli {{info.image.size}}:</div>
+          <div class="collapsible-body">
+            {% if info.skip %}
+              <img src="{{ url_for('static', filename='')}}image/abstrak/{{info.clean}}" />
+            {%else%}
+              <img src="{{info.clean}}" />
+            {%endif%}
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Citra Grayscale:</div>
+          <div class="collapsible-body">
+            <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}ori.jpg" />
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Citra Hasil Skew Corrected (Rotasi {{ info.image.skew }}°): </div>
+          <div class="collapsible-body">
+            <div class="row">
+              <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}skew_corrected.jpg"/>
+             </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Citra Biner dan Horizontal Projection Segmentasi baris: <span class="badge">{{info.image.lines.number}} baris ditemukan</span></div>
+          <div class="collapsible-body">
+            <div class="row">
+               <div class="col s6"><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}binary.jpg"/></div>
+               <div class="col s6"><div id="chart"></div></div>
+             </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Segmentasi Kata dan huruf:</div>
+          <div class="collapsible-body">
+            {% for i in range(0,info.image.lines.number) %}
+            <span>Baris ke-{{i+1}}</span>
+            <img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}line_segmentation_{{i}}.jpg" />
+            <ul class="collapsible">
+              <li>
+                <div class="collapsible-header">Kata yang terdeteksi menggunakan Vertical Projection: <span class="badge">{{info.image.word.count[i]}} kata ditemukan</span></div>
+                <div class="collapsible-body">
+                  <div class="row">
+                      {% for a in range(0,info.image.word.count[i]) %}
+                        <div class="col s3">
+                          <div class="card horizontal">
+
+                            <div class="card-image">
+                              <img class="img_char" src="{{ url_for('static', filename='')}}cache/{{info.prefix}}word_segmentation_{{i}}_{{a}}.jpg" />
+                            </div>
+                            <div class="card-stacked">
+                              <div class="card-content">
+                                <p>{{ info.classifier[i][a] }}</p>
+                              </div>
+                              <div class="card-action">
+                                    <span class="blue-text text-darken-2">{{ info.karakter[i][a]|length }} Karakter terdeteksi</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {%endfor%}
+                  </div>
+                </div>
+              </li>
+            </ul>
+            {%endfor%}
+          </div>
+        </li>
+      </ul>
+    </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('select').formSelect();
+    $('.tabs').tabs();
+    $('.collapsible').collapsible();
+  });
+
+  var options = {
+              chart: {
+                  type: 'bar',
+                  animations: {
+                      enabled: true
+                  },
+                  height:500,
+              },
+              plotOptions: {
+                  bar: {
+                      horizontal: true,
+                      barHeight: '50%',
+
+                  },
+              },
+              dataLabels: {
+                  enabled: false,
+              },
+              stroke: {
+                  colors: ["#000000"],
+                  width: 1
+              },
+              series: [{
+                  name: 'Piksel hitam',
+                  data: {{info.image.lines.projection.tolist()}}
+              }],
+              yaxis: {
+                  axisBorder: {
+                      show: false
+                  },
+                  axisTicks: {
+                      show: false
+                  },
+                  labels: {
+                      show: false
+                  },
+              },
+          }
+
+         var chart = new ApexCharts(
+              document.querySelector("#chart"),
+              options
+          );
+
+          chart.render();
+</script>
+{%endblock%}

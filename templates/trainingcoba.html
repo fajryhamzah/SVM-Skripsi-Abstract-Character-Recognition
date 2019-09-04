@@ -1,0 +1,337 @@
+{% extends "index.html" %}
+{% block konten %}
+<style>
+.subtitle{
+  margin-top: 10px !important;
+  margin-bottom: 0px !important;
+}
+
+.table-grid{
+  border: 1px solid black;
+}
+
+.table-grid td{
+  padding: 1px;
+  border: 1px solid black;
+}
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col s12 right-align">
+      <a class="waves-effect waves-light btn blue darken-1" href="/train/save">Simpan</a>
+      <a class="waves-effect waves-light btn red darken-1" href="/train/cancel">Cancel</a>
+    </div>
+  </div>
+  <h5>Hasil Pelatihan</h5>
+  <table>
+    <tbody>
+      <tr>
+        <td>Jumlah model sebelumnya</td>
+        <td>{{info.train.count_model_before}}</td>
+      </tr>
+      <tr>
+        <td>Jumlah model setelah pelatihan</td>
+        <td>{{info.train.count_model}}</td>
+      </tr>
+      <tr>
+        <td>Karakter terlatih({{info.train.classes_len}} karakter)</td>
+        <td>{{",".join(info.train.classes_after)}}</td>
+      </tr>
+      <tr>
+        <td>Karakter terlatih sebelumnya({{info.train.classes_len_before}} karakter)</td>
+        <td>{{",".join(info.train.classes_before)}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>Detail</h5>
+  <table class="highlight">
+   <tbody>
+     <tr>
+       <td>Kelas :</td>
+       <td>{{info.first_image.class}}</td>
+     </tr>
+     <tr>
+       <td>Citra Asli ukuran {{info.first_image.ori_size}}px:</td>
+       <td><img src="{{info.first_image.clean}}" /></td>
+     </tr>
+     <tr>
+       <td>Citra Grayscale:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}ori.jpg" /></td>
+     </tr>
+     {% if info.first_image.ori_size != info.first_image.current_size %}
+     <tr>
+       <td>Resize Citra {{info.first_image.current_size}}px:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}resize.jpg" /></td>
+     </tr>
+     {%endif%}
+     <tr>
+       <td>Citra Biner:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefix}}binary.jpg" /></td>
+     </tr>
+   </tbody>
+  </table>
+
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header">Nilai Citra ({{ ",".join(info.first_image.channel) }}):</div>
+      <div class="collapsible-body">
+        <div style="width:100%;overflow: scroll">
+        <table>
+          <tbody>
+            {% for i in info.first_image.vector_asli %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Citra Grayscale:</div>
+      <div class="collapsible-body">
+        <table>
+          <tbody>
+            {% for i in info.first_image.vector_grayscale %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Citra Biner:</div>
+      <div class="collapsible-body">
+        <div class="col s12">
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header">Integral Image</div>
+              <div class="collapsible-body">
+                <div style="width:100%;overflow: scroll">
+                  <table class="table-grid">
+                    <tbody>
+                      {% for i in info.first_image.binary.integral_image %}
+                        <tr>
+                          <td>
+                            {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                            </td>
+                        </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header">Nilai Citra</div>
+              <div class="collapsible-body">
+                <table>
+                  <tbody>
+                    {% for i in info.first_image.vector %}
+                      <tr>
+                        <td>
+                          {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                          </td>
+                      </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Vektor:</div>
+      <div class="collapsible-body">{{info.first_image.vector_flat}}</div>
+    </li>
+  </ul>
+  <h5>Contoh model hasil pelatihan </h5>
+  <table class="highlight">
+   <tbody>
+     <tr>
+       <td>No model:</td>
+       <td>{{info.ex.no}}</td>
+     </tr>
+     <tr>
+       <td>Kelas negatif:</td>
+       <td>{{info.ex.positif}}</td>
+     </tr>
+     {% if info.ex.type == "rbf" %}
+     <tr>
+       <td>Gamma:</td>
+       <td>{{info.ex.gamma}}</td>
+     </tr>
+     {%endif%}
+     <tr>
+       <td>Nilai b:</td>
+       <td>{{info.ex.bias}}</td>
+     </tr>
+     <tr>
+       <td>Jumlah support vector tiap kelas:</td>
+       <td>{{info.ex.n_support}}</td>
+     </tr>
+   </tbody>
+  </table>
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header">Hasil Kernel:</div>
+      <div class="collapsible-body">
+        <table>
+          <tbody>
+            {% for i in info.ex.kernel %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai W:</div>
+      <div class="collapsible-body">
+        <table>
+          <tbody>
+            {% for i in info.ex.w %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+  </ul>
+  {% if info.second_image is defined %}
+  <h5>Citra 2</h5>
+  <table class="highlight">
+   <tbody>
+     <tr>
+       <td>Kelas :</td>
+       <td>{{info.second_image.class}}</td>
+     </tr>
+     <tr>
+       <td>Citra Asli ukuran {{info.second_image.ori_size}}px:</td>
+       <td><img src="{{info.second_image.clean}}" /></td>
+     </tr>
+     <tr>
+       <td>Citra Grayscale:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefixx}}ori.jpg" /></td>
+     </tr>
+     {% if info.second_image.ori_size != info.second_image.current_size %}
+     <tr>
+       <td>Resize Citra {{info.second_image.current_size}}px:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefixx}}resize.jpg" /></td>
+     </tr>
+     {%endif%}
+     <tr>
+       <td>Citra Biner:</td>
+       <td><img src="{{ url_for('static', filename='')}}cache/{{info.prefixx}}binary.jpg" /></td>
+     </tr>
+   </tbody>
+  </table>
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header">Nilai Citra ({{ ",".join(info.second_image.channel) }}):</div>
+      <div class="collapsible-body">
+        <table>
+          <tbody>
+            {% for i in info.second_image.vector_asli %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Citra Grayscale:</div>
+      <div class="collapsible-body">
+        <table>
+          <tbody>
+            {% for i in info.second_image.vector_grayscale %}
+              <tr>
+                <td>
+                  {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                  </td>
+              </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Citra Biner:</div>
+      <div class="collapsible-body">
+        <div class="col s12">
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header">Integral Image</div>
+              <div class="collapsible-body">
+                <div style="width:100%;overflow: scroll">
+                  <table class="table-grid">
+                    <tbody>
+                      {% for i in info.second_image.binary.integral_image %}
+                        <tr>
+                          <td>
+                            {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                            </td>
+                        </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header">Nilai Citra</div>
+              <div class="collapsible-body">
+                <table>
+                  <tbody>
+                    {% for i in info.second_image.vector %}
+                      <tr>
+                        <td>
+                          {{ ((i|string)[1:-1]).replace(",","</td><td>")|safe }}
+                          </td>
+                      </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Nilai Vektor:</div>
+      <div class="collapsible-body">{{info.second_image.vector_flat}}</div>
+    </li>
+  </ul>
+{%endif%}
+</div>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
+
+{%endblock%}

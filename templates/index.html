@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>SKRIPSI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='materialize.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='apexcharts.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='materialize.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='apexcharts.min.js') }}"></script>
+
+  <style>
+    pre{
+      padding: 0 !important
+    }
+    .container{
+      padding:1%
+    }
+  </style>
+</head>
+<body>
+  {% include 'menu.html' %}
+  {% block konten %}
+        konten
+  {% endblock %}
+</body>
+<script type="text/javascript">
+
+$(".dropdown-trigger").dropdown();
+        
+</script>
+</html>
